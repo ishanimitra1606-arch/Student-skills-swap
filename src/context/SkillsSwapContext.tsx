@@ -22,358 +22,34 @@ export interface ActiveVideoSession {
   isOpen: boolean;
 }
 
-const INITIAL_USERS: User[] = [
-  {
-    id: 'user_1',
-    name: 'Aarav Sharma',
-    email: 'aarav.s@iitd.ac.in',
-    password: 'password123',
-    college: 'IIT Delhi',
-    city: 'Delhi',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    bio: 'CS Senior passionate about Full Stack Web Dev, Machine Learning, and Competitive Programming. Always eager to exchange tech skills!',
-    skillsOffered: ['Python & Data Science', 'React & Next.js', 'Data Structures & Algorithms'],
-    skillsWanted: ['Spanish Speaking', 'Guitar Fundamentals', 'UI/UX Design in Figma'],
-    coinBalance: 140,
-    languages: ['English', 'Hindi'],
-    availability: 'Mon, Wed, Sat (6 PM - 9 PM)',
-    rating: 4.9,
-    reviewCount: 12,
-    isProfileComplete: true,
-    isOnline: true,
-    lastActive: 'Online',
-    dailyCheckInClaimed: false
-  },
-  {
-    id: 'user_2',
-    name: 'Priya Patel',
-    email: 'priya.p@mu.ac.in',
-    college: 'Mumbai University',
-    city: 'Mumbai',
-    avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-    bio: 'Design enthusiast & acoustic guitarist. I craft clean user interfaces and teach acoustic guitar basics to beginners.',
-    skillsOffered: ['UI/UX Design in Figma', 'Acoustic Guitar Basics', 'Digital Illustration'],
-    skillsWanted: ['Python & Data Science', 'Public Speaking', 'Financial Literacy'],
-    coinBalance: 120,
-    languages: ['English', 'Hindi', 'Gujarati'],
-    availability: 'Tue, Thu, Sun (4 PM - 8 PM)',
-    rating: 4.8,
-    reviewCount: 8,
-    isProfileComplete: true,
-    isOnline: true,
-    lastActive: 'Online'
-  },
-  {
-    id: 'user_3',
-    name: 'Rahul Verma',
-    email: 'rahul.v@du.ac.in',
-    college: 'Delhi University (SRCC)',
-    city: 'Delhi',
-    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    bio: 'Finance major with 3+ years experience in stock market basics, Excel financial modeling, and spoken Spanish.',
-    skillsOffered: ['Financial Literacy & Stocks', 'Advanced Excel & PowerBI', 'Spanish Speaking'],
-    skillsWanted: ['React & Next.js', 'Video Editing in Premiere', 'Data Structures & Algorithms'],
-    coinBalance: 90,
-    languages: ['English', 'Hindi', 'Spanish'],
-    availability: 'Weekends All Day',
-    rating: 4.7,
-    reviewCount: 6,
-    isProfileComplete: true,
-    isOnline: false,
-    lastActive: '15 mins ago'
-  },
-  {
-    id: 'user_4',
-    name: 'Ananya Sen',
-    email: 'ananya.sen@ju.ac.in',
-    college: 'Jadavpur University',
-    city: 'Kolkata',
-    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    bio: 'Media & Communications student creating YouTube video tutorials. Fluent in German and video editing.',
-    skillsOffered: ['Video Editing in Premiere', 'German Language Level A2', 'Creative Content Writing'],
-    skillsWanted: ['UI/UX Design in Figma', 'Acoustic Guitar Basics', 'Public Speaking'],
-    coinBalance: 160,
-    languages: ['English', 'Bengali', 'German'],
-    availability: 'Mon - Fri (7 PM - 10 PM)',
-    rating: 5.0,
-    reviewCount: 15,
-    isProfileComplete: true,
-    isOnline: true,
-    lastActive: 'Online'
-  },
-  {
-    id: 'user_5',
-    name: 'Vikram Reddy',
-    email: 'vikram.r@bits-pilani.ac.in',
-    college: 'BITS Pilani',
-    city: 'Bengaluru',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    bio: 'Mechanical Engineering student loving calculus, physics problem solving, and public speaking coaching.',
-    skillsOffered: ['Calculus & Differential Equations', 'Public Speaking', 'Physics Problem Solving'],
-    skillsWanted: ['Python & Data Science', 'German Language Level A2', 'Financial Literacy & Stocks'],
-    coinBalance: 110,
-    languages: ['English', 'Telugu', 'Hindi'],
-    availability: 'Everyday after 8 PM',
-    rating: 4.6,
-    reviewCount: 5,
-    isProfileComplete: true,
-    isOnline: false,
-    lastActive: '1 hour ago'
-  },
-  {
-    id: 'admin_user',
-    name: 'Platform Administrator',
-    email: 'admin@studentskillsswap.edu',
-    college: 'Student Skills Swap HQ',
-    city: 'Delhi',
-    avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
-    bio: 'Official System Administrator monitoring platform safety, Skill Coin integrity, and swap analytics.',
-    skillsOffered: ['Community Management', 'Platform Safety'],
-    skillsWanted: ['User Feedback'],
-    coinBalance: 999,
-    languages: ['English', 'Hindi'],
-    availability: '24/7',
-    rating: 5.0,
-    reviewCount: 50,
-    isProfileComplete: true,
-    isOnline: true,
-    lastActive: 'Online',
-    isAdmin: true
-  }
-];
+const DEFAULT_USER: User = {
+  id: 'student_1',
+  name: 'Student Member',
+  email: 'student@college.edu',
+  password: 'password123',
+  college: 'Your University',
+  city: 'Campus',
+  avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+  bio: 'Welcome to SkillsSwap! Register your account or post your first skill to start learning with fellow students.',
+  skillsOffered: [],
+  skillsWanted: [],
+  coinBalance: 100,
+  languages: ['English'],
+  availability: 'Flexible',
+  rating: 5.0,
+  reviewCount: 0,
+  isProfileComplete: false,
+  isOnline: true,
+  lastActive: 'Online',
+  dailyCheckInClaimed: false
+};
 
-const INITIAL_SKILLS: SkillItem[] = [
-  {
-    id: 'skill_1',
-    userId: 'user_1',
-    userName: 'Aarav Sharma',
-    userCollege: 'IIT Delhi',
-    userCity: 'Delhi',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    title: 'Python for Machine Learning & Data Science',
-    description: 'Learn pandas, numpy, matplotlib, and scikit-learn hands-on with real dataset projects.',
-    category: 'Programming & Tech',
-    format: 'ONLINE',
-    coinsCost: 20,
-    rating: 4.9,
-    tags: ['Python', 'AI', 'Data Science', 'Machine Learning'],
-    createdAt: Date.now() - 86400000 * 5
-  },
-  {
-    id: 'skill_2',
-    userId: 'user_2',
-    userName: 'Priya Patel',
-    userCollege: 'Mumbai University',
-    userCity: 'Mumbai',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-    title: 'UI/UX Design Basics with Figma',
-    description: 'Master wireframing, auto-layout, interactive prototyping, and mobile design systems.',
-    category: 'UI/UX & Graphic Design',
-    format: 'ONLINE',
-    coinsCost: 20,
-    rating: 4.8,
-    tags: ['Figma', 'UI Design', 'UX', 'Web Design'],
-    createdAt: Date.now() - 86400000 * 4
-  },
-  {
-    id: 'skill_3',
-    userId: 'user_2',
-    userName: 'Priya Patel',
-    userCollege: 'Mumbai University',
-    userCity: 'Mumbai',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-    title: 'Acoustic Guitar for Beginners',
-    description: 'Chords, strumming patterns, and playing popular acoustic songs in just 4 sessions.',
-    category: 'Music & Instruments',
-    format: 'OFFLINE',
-    coinsCost: 20,
-    rating: 4.9,
-    tags: ['Guitar', 'Music', 'Acoustic', 'Chords'],
-    createdAt: Date.now() - 86400000 * 3
-  },
-  {
-    id: 'skill_4',
-    userId: 'user_3',
-    userName: 'Rahul Verma',
-    userCollege: 'Delhi University (SRCC)',
-    userCity: 'Delhi',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    title: 'Conversational Spanish Speaking',
-    description: 'Practice everyday dialogues, pronunciation, and essential vocabulary with native-paced guidance.',
-    category: 'Languages & Linguistics',
-    format: 'ONLINE',
-    coinsCost: 20,
-    rating: 4.7,
-    tags: ['Spanish', 'Languages', 'Conversation'],
-    createdAt: Date.now() - 86400000 * 2
-  },
-  {
-    id: 'skill_5',
-    userId: 'user_4',
-    userName: 'Ananya Sen',
-    userCollege: 'Jadavpur University',
-    userCity: 'Kolkata',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    title: 'Video Editing in Adobe Premiere Pro',
-    description: 'Color grading, audio tuning, jump cuts, and motion graphics for YouTube & social reels.',
-    category: 'Photo & Video Editing',
-    format: 'ONLINE',
-    coinsCost: 20,
-    rating: 5.0,
-    tags: ['Premiere Pro', 'Video Editing', 'Reels', 'YouTube'],
-    createdAt: Date.now() - 86400000 * 1
-  },
-  {
-    id: 'skill_6',
-    userId: 'user_5',
-    userName: 'Vikram Reddy',
-    userCollege: 'BITS Pilani',
-    userCity: 'Bengaluru',
-    userAvatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    title: 'Engineering Calculus & Differential Equations',
-    description: 'Clear step-by-step concepts, exam prep techniques, and intuition for complex engineering math.',
-    category: 'Math & Statistics',
-    format: 'ONLINE',
-    coinsCost: 20,
-    rating: 4.6,
-    tags: ['Math', 'Calculus', 'Engineering', 'Exams'],
-    createdAt: Date.now()
-  }
-];
-
-const INITIAL_SWAPS: SwapRequest[] = [
-  {
-    id: 'swap_1',
-    requesterId: 'user_1',
-    requesterName: 'Aarav Sharma',
-    requesterAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    recipientId: 'user_2',
-    recipientName: 'Priya Patel',
-    recipientAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-    skillOffered: 'Python for Machine Learning & Data Science',
-    skillRequested: 'UI/UX Design Basics with Figma',
-    message: 'Hey Priya! I can teach you Python ML modeling in exchange for learning Figma design. Let me know!',
-    status: 'ACCEPTED',
-    createdAt: Date.now() - 86400000 * 2
-  },
-  {
-    id: 'swap_2',
-    requesterId: 'user_4',
-    requesterName: 'Ananya Sen',
-    requesterAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    recipientId: 'user_1',
-    recipientName: 'Aarav Sharma',
-    recipientAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    skillOffered: 'Video Editing in Adobe Premiere Pro',
-    skillRequested: 'Python for Machine Learning & Data Science',
-    message: 'Hi Aarav! Loved your Python syllabus. Want to exchange with Premiere Pro editing?',
-    status: 'PENDING',
-    createdAt: Date.now() - 3600000 * 4
-  },
-  {
-    id: 'swap_3',
-    requesterId: 'user_3',
-    requesterName: 'Rahul Verma',
-    requesterAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    recipientId: 'user_1',
-    recipientName: 'Aarav Sharma',
-    recipientAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    skillOffered: 'Conversational Spanish Speaking',
-    skillRequested: 'Python for Machine Learning & Data Science',
-    message: 'Hola Aarav! I completed a 2-hour session teaching Spanish basics to you.',
-    status: 'COMPLETED',
-    createdAt: Date.now() - 86400000 * 5,
-    completedAt: Date.now() - 86400000 * 1
-  }
-];
-
-const INITIAL_CHATS: ChatMessage[] = [
-  {
-    id: 'msg_1',
-    swapId: 'swap_1',
-    senderId: 'user_1',
-    senderName: 'Aarav Sharma',
-    receiverId: 'user_2',
-    text: 'Hi Priya! Thanks for accepting the swap. When are you free for our first Figma session?',
-    timestamp: Date.now() - 7200000,
-    isRead: true
-  },
-  {
-    id: 'msg_2',
-    swapId: 'swap_1',
-    senderId: 'user_2',
-    senderName: 'Priya Patel',
-    receiverId: 'user_1',
-    text: 'Hey Aarav! I am available this Thursday at 5 PM. I can share my Figma starter template link beforehand!',
-    timestamp: Date.now() - 3600000,
-    isRead: true
-  },
-  {
-    id: 'msg_3',
-    swapId: 'swap_1',
-    senderId: 'user_1',
-    senderName: 'Aarav Sharma',
-    receiverId: 'user_2',
-    text: 'Sounds awesome! I prepared a Python Jupyter notebook for you too 🚀',
-    timestamp: Date.now() - 1800000,
-    isRead: false
-  }
-];
-
-const INITIAL_NOTIFS: NotificationItem[] = [
-  {
-    id: 'notif_1',
-    userId: 'user_1',
-    title: 'New Swap Request Received!',
-    message: 'Ananya Sen wants to swap Video Editing for your Python skill.',
-    type: 'SWAP_REQUEST',
-    timestamp: Date.now() - 3600000 * 4,
-    isRead: false
-  },
-  {
-    id: 'notif_2',
-    userId: 'user_1',
-    title: 'Swap Request Accepted',
-    message: 'Priya Patel accepted your UI/UX Design swap request!',
-    type: 'SWAP_ACCEPTED',
-    timestamp: Date.now() - 86400000,
-    isRead: true
-  },
-  {
-    id: 'notif_3',
-    userId: 'user_1',
-    title: 'Skill Coins Received (+20)',
-    message: 'You earned 20 Skill Coins for completing Spanish-Python swap with Rahul Verma.',
-    type: 'COIN_REWARD',
-    timestamp: Date.now() - 86400000 * 1,
-    isRead: true
-  }
-];
-
-const INITIAL_TRANSACTIONS: CoinTransaction[] = [
-  {
-    id: 'tx_1',
-    userId: 'user_1',
-    amount: 100,
-    reason: 'Registration Bonus (+100 Coins)',
-    timestamp: Date.now() - 86400000 * 10
-  },
-  {
-    id: 'tx_2',
-    userId: 'user_1',
-    amount: 10,
-    reason: 'Completed Profile Bonus (+10 Coins)',
-    timestamp: Date.now() - 86400000 * 9
-  },
-  {
-    id: 'tx_3',
-    userId: 'user_1',
-    amount: 20,
-    reason: 'Completed Teaching Session (Python ML)',
-    counterpartyName: 'Rahul Verma',
-    timestamp: Date.now() - 86400000 * 1
-  }
-];
+const INITIAL_USERS: User[] = [DEFAULT_USER];
+const INITIAL_SKILLS: SkillItem[] = [];
+const INITIAL_SWAPS: SwapRequest[] = [];
+const INITIAL_CHATS: ChatMessage[] = [];
+const INITIAL_NOTIFS: NotificationItem[] = [];
+const INITIAL_TRANSACTIONS: CoinTransaction[] = [];
 
 interface SkillsSwapContextType {
   currentUser: User;
@@ -443,6 +119,28 @@ export const SkillsSwapProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       console.warn(`localStorage quota exceeded while saving ${key}:`, err);
     }
   };
+
+  // Automatically purge legacy mock data from previous sessions if present
+  useEffect(() => {
+    const savedUsersStr = localStorage.getItem('skills_swap_users') || '';
+    const savedSkillsStr = localStorage.getItem('skills_swap_skills') || '';
+    if (savedUsersStr.includes('aarav.s@iitd.ac.in') || savedSkillsStr.includes('skill_1')) {
+      localStorage.removeItem('skills_swap_users');
+      localStorage.removeItem('skills_swap_current_user');
+      localStorage.removeItem('skills_swap_skills');
+      localStorage.removeItem('skills_swap_swaps');
+      localStorage.removeItem('skills_swap_chats');
+      localStorage.removeItem('skills_swap_notifications');
+      localStorage.removeItem('skills_swap_transactions');
+      setUsers([DEFAULT_USER]);
+      setCurrentUser(DEFAULT_USER);
+      setSkills([]);
+      setSwaps([]);
+      setChats([]);
+      setNotifications([]);
+      setTransactions([]);
+    }
+  }, []);
 
   const [users, setUsers] = useState<User[]>(() => loadStored('skills_swap_users', INITIAL_USERS));
   const [currentUser, setCurrentUser] = useState<User>(() => loadStored('skills_swap_current_user', INITIAL_USERS[0]));

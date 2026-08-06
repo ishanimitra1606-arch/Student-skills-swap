@@ -183,48 +183,66 @@ export const HomeScreen: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {skills.slice(0, 4).map((skill) => (
-            <div
-              key={skill.id}
-              className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-500/40 transition-all flex flex-col justify-between gap-3"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                    {skill.category}
-                  </span>
-                  <span className="text-[11px] text-amber-400 font-bold flex items-center gap-1">
-                    <Coins className="w-3.5 h-3.5" /> {skill.coinsCost} Coins
-                  </span>
-                </div>
-                <h4 className="font-heading font-bold text-sm text-white">{skill.title}</h4>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2">{skill.description}</p>
-              </div>
-
-              <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={skill.userAvatarUrl}
-                    alt={skill.userName}
-                    className="w-7 h-7 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="text-xs font-bold text-slate-200">{skill.userName}</p>
-                    <p className="text-[10px] text-slate-400">{skill.userCollege}</p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setSelectedSkillForSwap(skill)}
-                  className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors shadow-md shadow-indigo-600/20"
-                >
-                  Swap Skill
-                </button>
-              </div>
+        {skills.length === 0 ? (
+          <div className="p-8 rounded-2xl bg-slate-800/50 border border-slate-700/60 text-center flex flex-col items-center justify-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <Sparkles className="w-6 h-6" />
             </div>
-          ))}
-        </div>
+            <div>
+              <h4 className="font-heading font-bold text-sm text-white">No skills listed yet</h4>
+              <p className="text-xs text-slate-400 mt-1 max-w-sm">Be the pioneer! Post a skill you can teach to start swapping and earning Skill Coins with your peers.</p>
+            </div>
+            <button
+              onClick={() => setShowAddSkill(true)}
+              className="mt-1 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition-all flex items-center gap-1.5"
+            >
+              <PlusCircle className="w-4 h-4" /> Offer a Skill
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skills.slice(0, 4).map((skill) => (
+              <div
+                key={skill.id}
+                className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-500/40 transition-all flex flex-col justify-between gap-3"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                      {skill.category}
+                    </span>
+                    <span className="text-[11px] text-amber-400 font-bold flex items-center gap-1">
+                      <Coins className="w-3.5 h-3.5" /> {skill.coinsCost} Coins
+                    </span>
+                  </div>
+                  <h4 className="font-heading font-bold text-sm text-white">{skill.title}</h4>
+                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">{skill.description}</p>
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={skill.userAvatarUrl}
+                      alt={skill.userName}
+                      className="w-7 h-7 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="text-xs font-bold text-slate-200">{skill.userName}</p>
+                      <p className="text-[10px] text-slate-400">{skill.userCollege}</p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedSkillForSwap(skill)}
+                    className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors shadow-md shadow-indigo-600/20"
+                  >
+                    Swap Skill
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Add Skill Modal */}
