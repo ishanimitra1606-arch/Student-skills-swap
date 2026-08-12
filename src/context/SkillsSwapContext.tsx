@@ -24,21 +24,21 @@ export interface ActiveVideoSession {
 
 const DEFAULT_USER: User = {
   id: 'student_1',
-  name: 'Student Member',
-  email: 'student@college.edu',
+  name: 'Priyanka Jena',
+  email: 'priyanka.sbwc@shailabalawomenscollege.ac.in',
   password: 'password123',
-  college: 'Your University',
-  city: 'Campus',
-  avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-  bio: 'Welcome to SkillsSwap! Register your account or post your first skill to start learning with fellow students.',
+  college: "Shailabala Women's Autonomous College, Cuttack",
+  city: 'Cuttack, Odisha',
+  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+  bio: "Student at Shailabala Women's Autonomous College, Cuttack. Excited to trade programming, design, and academic skills with fellow SBWAC students.",
   skillsOffered: [],
   skillsWanted: [],
   coinBalance: 100,
-  languages: ['English'],
+  languages: ['Odia', 'English', 'Hindi'],
   availability: 'Flexible',
   rating: 5.0,
   reviewCount: 0,
-  isProfileComplete: false,
+  isProfileComplete: true,
   isOnline: true,
   lastActive: 'Online',
   dailyCheckInClaimed: false
@@ -72,7 +72,7 @@ interface SkillsSwapContextType {
   logoutUser: () => void;
   updateUserAvatar: (newAvatarUrl: string) => void;
   switchUser: (userId: string) => void;
-  loginUserByEmail: (email: string, password?: string) => { success: boolean; message?: string };
+  loginUserByEmail: (email: string, password?: string, collegeInput?: string) => { success: boolean; message?: string };
   registerUser: (data: {
     name: string;
     email: string;
@@ -247,13 +247,50 @@ export const SkillsSwapProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (found) setCurrentUser(found);
   };
 
-  const loginUserByEmail = (email: string, password?: string): { success: boolean; message?: string } => {
+  const loginUserByEmail = (email: string, password?: string, collegeInput?: string): { success: boolean; message?: string } => {
     const cleanEmail = email.trim().toLowerCase();
+    const cleanCollegeInput = (collegeInput || '').trim().toLowerCase();
+
+    // If college input was entered, verify it belongs to Shailabala Women's Autonomous College
+    if (collegeInput && collegeInput.trim() !== '') {
+      const isShailabalaInput =
+        cleanCollegeInput.includes('shailabala') ||
+        cleanCollegeInput.includes('sbwc') ||
+        cleanCollegeInput.includes('sbwac');
+
+      if (!isShailabalaInput) {
+        return {
+          success: false,
+          message: `Access Denied: Only students who write Shailabala Women's Autonomous College are allowed to log in. "${collegeInput}" is not permitted.`
+        };
+      }
+    }
+
     const found = users.find(
       (u) => u.email.toLowerCase() === cleanEmail || u.name.toLowerCase() === cleanEmail
     );
     if (!found) {
-      return { success: false, message: 'No student account found with this email or name. Please try registering!' };
+      return { success: false, message: "No account found. Access is restricted strictly to students of Shailabala Women's Autonomous College, Cuttack. Please register your student account." };
+    }
+
+    // Verify student belongs to Shailabala Women's Autonomous College
+    const userCollege = (found.college || '').toLowerCase();
+    const userEmail = (found.email || '').toLowerCase();
+    const isShailabalaStudent =
+      userCollege.includes('shailabala') ||
+      userCollege.includes('sbwc') ||
+      userCollege.includes('sbwac') ||
+      userEmail.includes('shailabala') ||
+      userEmail.includes('sbwc') ||
+      userEmail.includes('sbwac') ||
+      found.id === 'student_1' ||
+      found.isAdmin;
+
+    if (!isShailabalaStudent) {
+      return {
+        success: false,
+        message: "Access Denied: This portal is strictly restricted to students of Shailabala Women's Autonomous College, Cuttack. Other students are not permitted."
+      };
     }
 
     if (!password) {
@@ -283,6 +320,26 @@ export const SkillsSwapProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     avatarUrl?: string;
   }): User => {
     const cleanEmail = data.email.trim().toLowerCase();
+    const cleanCollege = (data.college || '').trim().toLowerCase();
+
+    // Verify registration is restricted to students who write Shailabala Women's Autonomous College
+    const isShailabalaCollege =
+      cleanCollege.includes('shailabala') ||
+      cleanCollege.includes('sbwc') ||
+      cleanCollege.includes('sbwac');
+
+    const isShailabalaEmail =
+      cleanEmail.includes('shailabala') ||
+      cleanEmail.includes('sbwc') ||
+      cleanEmail.includes('sbwac');
+
+    // Reject non-Shailabala registrations
+    if (!isShailabalaCollege && !isShailabalaEmail) {
+      throw new Error(
+        `Access Denied: Only students who write Shailabala Women's Autonomous College are allowed to register. "${data.college}" is not permitted.`
+      );
+    }
+
     // Prevent duplicate email accounts
     const duplicate = users.find((u) => u.email.toLowerCase() === cleanEmail);
     if (duplicate) {
@@ -296,14 +353,14 @@ export const SkillsSwapProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       name: data.name,
       email: data.email,
       password: data.password || 'password123',
-      college: data.college,
-      city: data.city || 'Campus',
+      college: "Shailabala Women's Autonomous College, Cuttack",
+      city: data.city || 'Cuttack, Odisha',
       avatarUrl: data.avatarUrl && data.avatarUrl.trim() !== '' ? data.avatarUrl.trim() : defaultAvatar,
-      bio: data.bio || `Student at ${data.college} excited to exchange skills.`,
+      bio: data.bio || `Student at Shailabala Women's Autonomous College, Cuttack excited to exchange skills.`,
       skillsOffered: [data.skillOffered],
       skillsWanted: [data.skillWanted],
       coinBalance: 100, // 100 Skill Coins Welcome Bonus!
-      languages: ['English'],
+      languages: ['Odia', 'English'],
       availability: 'Weekdays & Weekends',
       rating: 5.0,
       reviewCount: 0,

@@ -19,6 +19,7 @@ export const AuthModal: React.FC = () => {
   
   // Login form state
   const [loginInput, setLoginInput] = useState('');
+  const [loginCollege, setLoginCollege] = useState("Shailabala Women's Autonomous College, Cuttack");
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -29,7 +30,7 @@ export const AuthModal: React.FC = () => {
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [showRegPassword, setShowRegPassword] = useState(false);
-  const [college, setCollege] = useState('');
+  const [college, setCollege] = useState("Shailabala Women's Autonomous College, Cuttack");
   const [city, setCity] = useState('');
   const [bio, setBio] = useState('');
   const [skillOffered, setSkillOffered] = useState('');
@@ -47,13 +48,14 @@ export const AuthModal: React.FC = () => {
       setRegPassword('');
       setRegConfirmPassword('');
       setShowRegPassword(false);
-      setCollege('');
-      setCity('');
+      setCollege("Shailabala Women's Autonomous College, Cuttack");
+      setCity('Cuttack, Odisha');
       setBio('');
       setSkillOffered('');
       setSkillWanted('');
       setRegAvatarUrl(PRESET_AVATARS[Math.floor(Math.random() * PRESET_AVATARS.length)]);
       setLoginInput('');
+      setLoginCollege("Shailabala Women's Autonomous College, Cuttack");
       setLoginPassword('');
       setShowLoginPassword(false);
       setLoginError('');
@@ -67,14 +69,27 @@ export const AuthModal: React.FC = () => {
     e.preventDefault();
     setLoginError('');
     if (!loginInput.trim()) {
-      setLoginError('Please enter your student email or name.');
+      setLoginError("Please enter your student email or name.");
       return;
     }
+    if (!loginCollege.trim()) {
+      setLoginError("Please write your college name.");
+      return;
+    }
+
+    // Verify college name typed in login form
+    const cleanCollege = loginCollege.trim().toLowerCase();
+    const isShailabala = cleanCollege.includes('shailabala') || cleanCollege.includes('sbwc') || cleanCollege.includes('sbwac');
+    if (!isShailabala) {
+      setLoginError(`Access Restricted: Login is allowed ONLY for students who write "Shailabala Women's Autonomous College". "${loginCollege}" is not permitted.`);
+      return;
+    }
+
     if (!loginPassword) {
       setLoginError('Please enter your account password.');
       return;
     }
-    const result = loginUserByEmail(loginInput, loginPassword);
+    const result = loginUserByEmail(loginInput, loginPassword, loginCollege);
     if (!result.success) {
       setLoginError(result.message || 'Incorrect credentials. Please try again!');
     } else {
@@ -130,7 +145,17 @@ export const AuthModal: React.FC = () => {
     if (!email.trim() || !email.includes('@')) return setRegError('Please enter a valid student email.');
     if (!regPassword || regPassword.length < 6) return setRegError('Password must be at least 6 characters long.');
     if (regPassword !== regConfirmPassword) return setRegError('Passwords do not match. Please verify your password.');
-    if (!college.trim()) return setRegError('Please enter your college/university name.');
+    if (!college.trim()) return setRegError('Please enter your college name.');
+    
+    // Validate that the college written is Shailabala Women's Autonomous College
+    const cleanCollege = college.trim().toLowerCase();
+    const cleanEmail = email.trim().toLowerCase();
+    const isShailabala = cleanCollege.includes('shailabala') || cleanCollege.includes('sbwc') || cleanCollege.includes('sbwac') || cleanEmail.includes('shailabala') || cleanEmail.includes('sbwc') || cleanEmail.includes('sbwac');
+
+    if (!isShailabala) {
+      return setRegError(`Access Restricted: Registration is allowed ONLY for students who write "Shailabala Women's Autonomous College". "${college}" is not permitted.`);
+    }
+
     if (!skillOffered.trim()) return setRegError('Please specify at least one skill you can teach.');
     if (!skillWanted.trim()) return setRegError('Please specify at least one skill you want to learn.');
 
@@ -221,10 +246,11 @@ export const AuthModal: React.FC = () => {
         <div className="p-6">
           {mode === 'login' ? (
             <div className="space-y-6">
-              <div className="bg-indigo-950/40 border border-indigo-500/20 rounded-xl p-4 flex items-start gap-3">
-                <Sparkles className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+              <div className="bg-indigo-950/60 border border-indigo-500/30 rounded-xl p-4 flex items-start gap-3">
+                <GraduationCap className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
                 <div className="text-xs text-indigo-200 leading-relaxed">
-                  Enter your registered student email address or full name to access your private account.
+                  <span className="font-bold text-white block mb-0.5">🏛️ Shailabala Women's Autonomous College, Cuttack</span>
+                  Login is strictly restricted to verified students of SBWAC. Non-Shailabala college accounts will be restricted.
                 </div>
               </div>
 
@@ -232,15 +258,36 @@ export const AuthModal: React.FC = () => {
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5 text-indigo-400" />
-                    Student Email or Registered Name
+                    Student Email or Name
                   </label>
                   <input
                     type="text"
                     value={loginInput}
                     onChange={(e) => setLoginInput(e.target.value)}
-                    placeholder="e.g. aarav.s@iitd.ac.in or Aarav Sharma"
+                    placeholder="e.g. priyanka.sbwc@shailabalawomenscollege.ac.in or Priyanka Jena"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                      College / Institution Name *
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-bold">Only SBWAC Allowed</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={loginCollege}
+                    onChange={(e) => setLoginCollege(e.target.value)}
+                    placeholder="e.g. Shailabala Women's Autonomous College, Cuttack"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                    required
+                  />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    🔒 Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>. Entries from other colleges will be blocked.
+                  </p>
                 </div>
 
                 <div>
@@ -277,12 +324,13 @@ export const AuthModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setLoginInput('aarav.s@iitd.ac.in');
+                      setLoginInput('priyanka.sbwc@shailabalawomenscollege.ac.in');
+                      setLoginCollege("Shailabala Women's Autonomous College, Cuttack");
                       setLoginPassword('password123');
                     }}
                     className="text-indigo-400 hover:text-indigo-300 font-bold underline transition-colors"
                   >
-                    Quick fill Aarav
+                    Quick fill Priyanka
                   </button>
                 </div>
 
@@ -412,7 +460,7 @@ export const AuthModal: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="riya.s@college.ac.in"
+                    placeholder="e.g. student@shailabalawomenscollege.ac.in"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                     required
                   />
@@ -465,30 +513,36 @@ export const AuthModal: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                    <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
-                    College / University *
+                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                      College / Institution Name *
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-bold">Only SBWAC Allowed</span>
                   </label>
                   <input
                     type="text"
                     value={college}
                     onChange={(e) => setCollege(e.target.value)}
-                    placeholder="e.g. IIT Delhi, DU, BITS"
+                    placeholder="e.g. Shailabala Women's Autonomous College, Cuttack"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                     required
                   />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    ⚠️ Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>. Students from other colleges will be blocked.
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                    City
+                    City / Location
                   </label>
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="e.g. Delhi, Mumbai, Bengaluru"
+                    placeholder="e.g. Cuttack, Odisha"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                   />
                 </div>

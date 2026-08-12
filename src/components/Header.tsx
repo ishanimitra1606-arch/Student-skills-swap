@@ -28,11 +28,11 @@ export const Header: React.FC = () => {
               <h1 className="font-heading font-extrabold text-lg text-white tracking-tight flex items-center gap-1.5">
                 <span>Student Skills Swap</span>
               </h1>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hidden sm:inline-block">
-                Verified Exchange
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 hidden sm:inline-block">
+                SBWAC Exclusive Portal
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium">No Money • Pure Skill Barter</p>
+            <p className="text-xs text-slate-400 font-medium">Shailabala Women's Autonomous College, Cuttack</p>
           </div>
         </div>
 
