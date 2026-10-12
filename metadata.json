@@ -1,6 +1,6 @@
 {
   "name": "Student Skills Swap",
-  "description": "Peer-to-peer student skill exchange and barter platform with Skill Coins, AI Smart Matching, and campus messaging.",
+  "description": "Peer-to-peer student skill exchange and barter platform with Skill Coins, AI Smart Matching, campus messaging, and Student Problem & Feedback Resolution Box.",
   "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -17,7 +17,12 @@ import {
   Upload,
   Link,
   X,
-  Check
+  Check,
+  CreditCard,
+  BadgeCheck,
+  ShieldCheck,
+  Sparkles,
+  ChevronRight
 } from 'lucide-react';
 import { AddSkillModal } from '../components/AddSkillModal';
 import appLogo from '../assets/images/app_logo_1785872616953.jpg';
@@ -41,6 +46,7 @@ export const ProfileScreen: React.FC = () => {
     transactions,
     setActiveTab,
     setIsAuthModalOpen,
+    openAuthModal,
     logoutUser,
     updateUserAvatar
   } = useSkillsSwap();
@@ -49,6 +55,8 @@ export const ProfileScreen: React.FC = () => {
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [customAvatarUrl, setCustomAvatarUrl] = useState('');
   const [previewAvatar, setPreviewAvatar] = useState(currentUser.avatarUrl);
+
+  const isGuest = currentUser.isGuest || currentUser.id === 'guest_student' || currentUser.id.startsWith('guest');
 
   const myTransactions = transactions.filter((t) => t.userId === currentUser.id);
 
@@ -117,30 +125,48 @@ export const ProfileScreen: React.FC = () => {
           <div>
             <div className="text-sm font-bold text-white flex items-center gap-2">
               {currentUser.name}
-              <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold flex items-center gap-1">
-                <img src={appLogo} alt="" className="w-2.5 h-2.5 rounded-full" />
-                Verified Student
-              </span>
+              {isGuest ? (
+                <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30 font-bold">
+                  Guest Mode
+                </span>
+              ) : (
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  Verified Student
+                </span>
+              )}
+              {currentUser.collegeId && !isGuest && (
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 font-mono px-2 py-0.5 rounded-md border border-indigo-500/30 font-semibold flex items-center gap-1">
+                  <CreditCard className="w-3 h-3 text-indigo-400" />
+                  ID: {currentUser.collegeId}
+                </span>
+              )}
             </div>
-            <div className="text-xs text-slate-400">{currentUser.email} • {currentUser.college}</div>
+            <div className="text-xs text-slate-400">
+              {isGuest
+                ? 'Create a profile to get your Shailabala student card & +100 Coins'
+                : `${currentUser.email} • ${currentUser.college}`}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => setIsAuthModalOpen(true)}
+            onClick={() => openAuthModal(isGuest ? 'register' : 'login')}
             className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2"
           >
             <UserCheck className="w-4 h-4" />
-            <span>Sign In / Create Account</span>
+            <span>{isGuest ? 'Create Student Profile' : 'Switch Student Account'}</span>
           </button>
-          <button
-            onClick={logoutUser}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 border border-rose-500/30 transition-all flex items-center justify-center gap-1.5"
-            title="Log out of current account"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
-          </button>
+          {!isGuest && (
+            <button
+              onClick={logoutUser}
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 border border-rose-500/30 transition-all flex items-center justify-center gap-1.5"
+              title="Log out to Guest Mode"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -176,13 +202,19 @@ export const ProfileScreen: React.FC = () => {
                   <img src={appLogo} alt="" className="w-3 h-3 rounded-full" />
                   SkillsSwap Member
                 </span>
+                {currentUser.collegeId && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <CreditCard className="w-3 h-3 text-emerald-400" />
+                    ID: {currentUser.collegeId}
+                  </span>
+                )}
                 {currentUser.isAdmin && (
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1">
                     <ShieldAlert className="w-3 h-3" /> System Admin
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-1 flex items-center gap-3">
+              <p className="text-xs text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
                 <span className="flex items-center gap-1 font-semibold text-slate-300">
                   <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
                   {currentUser.college}
@@ -322,6 +354,62 @@ export const ProfileScreen: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Account Management & Security Zone */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-slate-800 text-indigo-400 flex items-center justify-center">
+              <User className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-heading font-bold text-sm text-white">Account & Session Management</h3>
+              <p className="text-xs text-slate-400">
+                {isGuest ? 'Currently browsing in Guest Student Mode' : `Signed in as ${currentUser.name} (${currentUser.collegeId || 'Student Member'})`}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+          {isGuest ? (
+            <>
+              <button
+                onClick={() => openAuthModal('login')}
+                className="flex-1 py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition-all"
+              >
+                <UserCheck className="w-4 h-4" />
+                <span>Log In with Shailabala College ID</span>
+              </button>
+              <button
+                onClick={() => openAuthModal('register')}
+                className="flex-1 py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Create Student Profile (+100 Coins)</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => openAuthModal('login')}
+                className="flex-1 py-3 px-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+              >
+                <UserCheck className="w-4 h-4 text-indigo-400" />
+                <span>Switch / Register Student ID</span>
+              </button>
+              <button
+                onClick={logoutUser}
+                className="flex-1 py-3 px-4 rounded-2xl bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md"
+                title="Log out to Guest Student Mode"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log Out of Student Account</span>
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {showAddSkill && <AddSkillModal onClose={() => setShowAddSkill(false)} />}

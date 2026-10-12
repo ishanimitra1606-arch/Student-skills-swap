@@ -1,0 +1,279 @@
+{
+  "users": [
+    {
+      "id": "student_1",
+      "name": "Priyanka Jena",
+      "email": "priyanka.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-CS042",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      "bio": "Computer Science student at Shailabala Women's Autonomous College, Cuttack. Excited to trade Python, Java, and Web Development skills.",
+      "skillsOffered": [
+        "Python",
+        "HTML",
+        "Java"
+      ],
+      "skillsWanted": [
+        "Spoken English",
+        "Presentation",
+        "Project Management"
+      ],
+      "coinBalance": 100,
+      "languages": [
+        "Odia",
+        "English",
+        "Hindi"
+      ],
+      "availability": "Flexible",
+      "rating": 5,
+      "reviewCount": 12,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": false,
+      "isGuest": false,
+      "createdAt": 1791564278643,
+      "lastLoginAt": 1791816278643
+    },
+    {
+      "id": "student_2",
+      "name": "Subhashree Dash",
+      "email": "subhashree.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-CS055",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150",
+      "bio": "Computer Science 3rd Year student at Shailabala Women's College. Specialized in Core Java, OOPs, and CSS layouts.",
+      "skillsOffered": [
+        "Java",
+        "CSS",
+        "HTML"
+      ],
+      "skillsWanted": [
+        "Python",
+        "Project Management"
+      ],
+      "coinBalance": 140,
+      "languages": [
+        "Odia",
+        "English",
+        "Hindi"
+      ],
+      "availability": "Evenings & Weekends",
+      "rating": 4.9,
+      "reviewCount": 8,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": true,
+      "isGuest": false,
+      "createdAt": 1791477878643,
+      "lastLoginAt": 1791805478643
+    },
+    {
+      "id": "student_3",
+      "name": "Ananya Pattnaik",
+      "email": "ananya.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2024-ENG012",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+      "bio": "English Department student at SBWAC. Passionate about helping fellow students master Spoken English fluency and interview communication.",
+      "skillsOffered": [
+        "Spoken English",
+        "Presentation"
+      ],
+      "skillsWanted": [
+        "HTML",
+        "CSS"
+      ],
+      "coinBalance": 180,
+      "languages": [
+        "English",
+        "Odia",
+        "Hindi"
+      ],
+      "availability": "4 PM - 7 PM Daily",
+      "rating": 5,
+      "reviewCount": 14,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": true,
+      "isGuest": false,
+      "createdAt": 1791391478643,
+      "lastLoginAt": 1791794678643
+    },
+    {
+      "id": "student_4",
+      "name": "Sweta Mohanty",
+      "email": "sweta.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-ECO034",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150",
+      "bio": "Economics Major & College Activity Coordinator. I teach Project Management, Agile group planning, and Excel Data Analysis.",
+      "skillsOffered": [
+        "Project Management",
+        "Presentation"
+      ],
+      "skillsWanted": [
+        "Python",
+        "Java"
+      ],
+      "coinBalance": 120,
+      "languages": [
+        "Odia",
+        "English"
+      ],
+      "availability": "Flexible / Weekends",
+      "rating": 4.8,
+      "reviewCount": 6,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": false,
+      "isGuest": false,
+      "createdAt": 1791305078643,
+      "lastLoginAt": 1791780278643
+    },
+    {
+      "id": "student_5",
+      "name": "Tapaswini Behera",
+      "email": "tapaswini.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2024-IT019",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150",
+      "bio": "IT student focusing on frontend web technologies: HTML5, modern CSS flex/grid, and JavaScript basics.",
+      "skillsOffered": [
+        "HTML",
+        "CSS"
+      ],
+      "skillsWanted": [
+        "Spoken English",
+        "Presentation"
+      ],
+      "coinBalance": 110,
+      "languages": [
+        "Odia",
+        "English"
+      ],
+      "availability": "5 PM - 8 PM",
+      "rating": 4.9,
+      "reviewCount": 5,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": true,
+      "isGuest": false,
+      "createdAt": 1791218678643,
+      "lastLoginAt": 1791758678643
+    },
+    {
+      "id": "student_6",
+      "name": "Lipsa Nayak",
+      "email": "lipsa.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-MATH008",
+      "password": "password123",
+      "college": "Shailabala Women's Autonomous College, Cuttack",
+      "city": "Cuttack, Odisha",
+      "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150",
+      "bio": "Mathematics Department student at Shailabala. Excited to teach Applied Mathematics, Probability, and Python math scripting.",
+      "skillsOffered": [
+        "Python",
+        "Math & Statistics"
+      ],
+      "skillsWanted": [
+        "Java",
+        "Spoken English"
+      ],
+      "coinBalance": 150,
+      "languages": [
+        "Odia",
+        "English",
+        "Hindi"
+      ],
+      "availability": "Morning & Evening slots",
+      "rating": 5,
+      "reviewCount": 9,
+      "isProfileComplete": true,
+      "isOnline": true,
+      "lastActive": "Online Now",
+      "dailyCheckInClaimed": true,
+      "isGuest": false,
+      "createdAt": 1791132278643,
+      "lastLoginAt": 1791737078643
+    }
+  ],
+  "loginLogs": [
+    {
+      "id": "log_init_student_1",
+      "userId": "student_1",
+      "userName": "Priyanka Jena",
+      "userEmail": "priyanka.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-CS042",
+      "type": "REGISTRATION",
+      "timestamp": 1791564278643,
+      "details": "Verified Student Enrollment"
+    },
+    {
+      "id": "log_init_student_2",
+      "userId": "student_2",
+      "userName": "Subhashree Dash",
+      "userEmail": "subhashree.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-CS055",
+      "type": "REGISTRATION",
+      "timestamp": 1791477878643,
+      "details": "Verified Student Enrollment"
+    },
+    {
+      "id": "log_init_student_3",
+      "userId": "student_3",
+      "userName": "Ananya Pattnaik",
+      "userEmail": "ananya.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2024-ENG012",
+      "type": "REGISTRATION",
+      "timestamp": 1791391478643,
+      "details": "Verified Student Enrollment"
+    },
+    {
+      "id": "log_init_student_4",
+      "userId": "student_4",
+      "userName": "Sweta Mohanty",
+      "userEmail": "sweta.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-ECO034",
+      "type": "REGISTRATION",
+      "timestamp": 1791305078643,
+      "details": "Verified Student Enrollment"
+    },
+    {
+      "id": "log_init_student_5",
+      "userId": "student_5",
+      "userName": "Tapaswini Behera",
+      "userEmail": "tapaswini.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2024-IT019",
+      "type": "REGISTRATION",
+      "timestamp": 1791218678643,
+      "details": "Verified Student Enrollment"
+    },
+    {
+      "id": "log_init_student_6",
+      "userId": "student_6",
+      "userName": "Lipsa Nayak",
+      "userEmail": "lipsa.sbwc@shailabalawomenscollege.ac.in",
+      "collegeId": "SBWAC-2023-MATH008",
+      "type": "REGISTRATION",
+      "timestamp": 1791132278643,
+      "details": "Verified Student Enrollment"
+    }
+  ],
+  "adminNotice": "Welcome Shailabala Students! Swap Python, Java, Spoken English, and Project skills with peers. Earn +100 Skill Coins on student verification.",
+  "lastUpdated": 1791823493711
+}

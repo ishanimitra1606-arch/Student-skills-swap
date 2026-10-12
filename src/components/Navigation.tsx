@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
-  const { activeTab, setActiveTab, currentUser, chats, swaps } = useSkillsSwap();
+  const { activeTab, setActiveTab, currentUser, chats, swaps, isAdminUnlocked } = useSkillsSwap();
 
   const unreadChats = chats.filter(
     (c) => c.receiverId === currentUser.id && !c.isRead
@@ -27,11 +27,11 @@ export const Navigation: React.FC = () => {
     { id: 2, label: 'Smart Match', icon: Sparkles, badge: 'AI' },
     { id: 3, label: 'Swaps', icon: ArrowLeftRight, badgeCount: pendingSwaps },
     { id: 4, label: 'Chat', icon: MessageSquare, badgeCount: unreadChats },
-    { id: 6, label: 'Profile', icon: User }
+    { id: 6, label: 'User Page', icon: User }
   ];
 
-  if (currentUser.isAdmin) {
-    navItems.push({ id: 7, label: 'Admin Panel', icon: ShieldAlert });
+  if (isAdminUnlocked) {
+    navItems.push({ id: 7, label: 'Admin Portal', icon: ShieldAlert });
   }
 
   return (

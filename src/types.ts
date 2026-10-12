@@ -20,6 +20,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  collegeId?: string;
   password?: string;
   college: string;
   city: string;
@@ -38,7 +39,22 @@ export interface User {
   isReported?: boolean;
   isBlocked?: boolean;
   isAdmin?: boolean;
+  isGuest?: boolean;
   dailyCheckInClaimed?: boolean;
+  createdAt?: number;
+  lastLoginAt?: number;
+  registrationDevice?: string;
+}
+
+export interface LoginLogItem {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  collegeId?: string;
+  type: 'REGISTRATION' | 'LOGIN' | 'SIGN_IN';
+  timestamp: number;
+  details?: string;
 }
 
 export interface SkillItem {
@@ -136,3 +152,36 @@ export interface SmartMatchResult {
   matchedWantedSkill: string;
   matchReasons: string[];
 }
+
+export type FeedbackCategory =
+  | 'Skill Swap Experience'
+  | 'Timetable & Scheduling'
+  | 'Platform Feature Request'
+  | 'Technical & Video Issue'
+  | 'Campus & Safety Concern'
+  | 'Learning Material & Content'
+  | 'Other Problem';
+
+export type FeedbackStatus = 'SUBMITTED' | 'UNDER_REVIEW' | 'PLANNED' | 'RESOLVED';
+export type FeedbackPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+
+export interface StudentFeedback {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  userCollege: string;
+  collegeId?: string;
+  title: string;
+  description: string;
+  category: FeedbackCategory;
+  priority: FeedbackPriority;
+  status: FeedbackStatus;
+  adminResponse?: string;
+  adminResolvedAt?: number;
+  upvotes: number;
+  upvotedBy: string[];
+  createdAt: number;
+  isAnonymous?: boolean;
+}
+

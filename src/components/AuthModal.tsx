@@ -1,7 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useSkillsSwap } from '../context/SkillsSwapContext';
 import { SkillCategory } from '../types';
-import { X, LogIn, UserPlus, Coins, GraduationCap, CheckCircle2, Sparkles, Mail, User as UserIcon, MapPin, BookOpen, Lightbulb, Camera, Upload, Link, Lock, Eye, EyeOff, KeyRound } from 'lucide-react';
+import {
+  X,
+  LogIn,
+  UserPlus,
+  Coins,
+  GraduationCap,
+  CheckCircle2,
+  Sparkles,
+  Mail,
+  User as UserIcon,
+  MapPin,
+  BookOpen,
+  Lightbulb,
+  Camera,
+  Upload,
+  Lock,
+  Eye,
+  EyeOff,
+  KeyRound,
+  ShieldCheck,
+  CreditCard,
+  BadgeCheck,
+  Check
+} from 'lucide-react';
 import appLogo from '../assets/images/app_logo_1785872616953.jpg';
 
 const PRESET_AVATARS = [
@@ -13,50 +36,76 @@ const PRESET_AVATARS = [
   'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150'
 ];
 
+export interface SkillOptionItem {
+  id: string;
+  name: string;
+  category: SkillCategory;
+  tag: string;
+}
+
+export const FEATURED_SKILL_OPTIONS: SkillOptionItem[] = [
+  { id: 'java', name: 'Java', category: 'Programming & Tech', tag: 'Coding' },
+  { id: 'python', name: 'Python', category: 'Programming & Tech', tag: 'Coding' },
+  { id: 'html', name: 'HTML', category: 'Programming & Tech', tag: 'Web Dev' },
+  { id: 'css', name: 'CSS', category: 'UI/UX & Graphic Design', tag: 'Styling' },
+  { id: 'spoken_english', name: 'Spoken English', category: 'Languages & Linguistics', tag: 'Language' },
+  { id: 'presentation', name: 'Presentation', category: 'Personal Growth & Soft Skills', tag: 'Soft Skills' },
+  { id: 'project_management', name: 'Project Management', category: 'Marketing & Business', tag: 'Management' }
+];
+
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, authModalTab, loginUserByEmail, registerUser, users, switchUser, currentUser } = useSkillsSwap();
-  const [mode, setMode] = useState<'login' | 'register'>('register');
+  const { isAuthModalOpen, setIsAuthModalOpen, authModalTab, loginUserByEmail, registerUser } = useSkillsSwap();
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   
   // Login form state
   const [loginInput, setLoginInput] = useState('');
   const [loginCollege, setLoginCollege] = useState("Shailabala Women's Autonomous College, Cuttack");
+  const [loginCollegeId, setLoginCollegeId] = useState('SBWAC-2023-CS042');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [loginSkillsOffered, setLoginSkillsOffered] = useState<string[]>(['Python']);
+  const [loginSkillsWanted, setLoginSkillsWanted] = useState<string[]>(['Spoken English']);
   const [loginError, setLoginError] = useState('');
 
   // Register form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [regCollegeId, setRegCollegeId] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [college, setCollege] = useState("Shailabala Women's Autonomous College, Cuttack");
   const [city, setCity] = useState('');
   const [bio, setBio] = useState('');
-  const [skillOffered, setSkillOffered] = useState('');
-  const [skillWanted, setSkillWanted] = useState('');
-  const [category, setCategory] = useState<SkillCategory>('TECH');
+  const [skillOffered, setSkillOffered] = useState('Java, Python');
+  const [skillWanted, setSkillWanted] = useState('Spoken English, Presentation');
+  const [category, setCategory] = useState<SkillCategory>('Programming & Tech');
   const [regAvatarUrl, setRegAvatarUrl] = useState(PRESET_AVATARS[0]);
   const [regError, setRegError] = useState('');
 
   // Reset form inputs whenever modal opens or tab mode changes
   useEffect(() => {
     if (isAuthModalOpen) {
-      setMode(authModalTab || 'register');
+      setMode(authModalTab || 'login');
       setName('');
       setEmail('');
+      setRegCollegeId('');
       setRegPassword('');
       setRegConfirmPassword('');
       setShowRegPassword(false);
       setCollege("Shailabala Women's Autonomous College, Cuttack");
       setCity('Cuttack, Odisha');
       setBio('');
-      setSkillOffered('');
-      setSkillWanted('');
+      setSkillOffered('Java, Python');
+      setSkillWanted('Spoken English, Presentation');
+      setCategory('Programming & Tech');
       setRegAvatarUrl(PRESET_AVATARS[Math.floor(Math.random() * PRESET_AVATARS.length)]);
       setLoginInput('');
       setLoginCollege("Shailabala Women's Autonomous College, Cuttack");
+      setLoginCollegeId('SBWAC-2023-CS042');
       setLoginPassword('');
+      setLoginSkillsOffered(['Python', 'HTML']);
+      setLoginSkillsWanted(['Spoken English', 'Presentation']);
       setShowLoginPassword(false);
       setLoginError('');
       setRegError('');
@@ -65,15 +114,52 @@ export const AuthModal: React.FC = () => {
 
   if (!isAuthModalOpen) return null;
 
+  const toggleLoginSkillOffered = (skillName: string) => {
+    setLoginSkillsOffered((prev) =>
+      prev.includes(skillName) ? prev.filter((s) => s !== skillName) : [...prev, skillName]
+    );
+  };
+
+  const toggleLoginSkillWanted = (skillName: string) => {
+    setLoginSkillsWanted((prev) =>
+      prev.includes(skillName) ? prev.filter((s) => s !== skillName) : [...prev, skillName]
+    );
+  };
+
+  const handleSelectRegTeachSkill = (skillName: string, skillCat: SkillCategory) => {
+    setCategory(skillCat);
+    setSkillOffered((prev) => {
+      const skills = prev.split(',').map((s) => s.trim()).filter(Boolean);
+      if (skills.some((s) => s.toLowerCase() === skillName.toLowerCase())) {
+        const filtered = skills.filter((s) => s.toLowerCase() !== skillName.toLowerCase());
+        return filtered.join(', ');
+      } else {
+        return skills.length > 0 ? `${prev}, ${skillName}` : skillName;
+      }
+    });
+  };
+
+  const handleSelectRegLearnSkill = (skillName: string) => {
+    setSkillWanted((prev) => {
+      const skills = prev.split(',').map((s) => s.trim()).filter(Boolean);
+      if (skills.some((s) => s.toLowerCase() === skillName.toLowerCase())) {
+        const filtered = skills.filter((s) => s.toLowerCase() !== skillName.toLowerCase());
+        return filtered.join(', ');
+      } else {
+        return skills.length > 0 ? `${prev}, ${skillName}` : skillName;
+      }
+    });
+  };
+
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
     if (!loginInput.trim()) {
-      setLoginError("Please enter your student email or name.");
+      setLoginError("Please enter your student email, roll number, or name.");
       return;
     }
     if (!loginCollege.trim()) {
-      setLoginError("Please write your college name.");
+      setLoginError("Please enter your college name.");
       return;
     }
 
@@ -85,15 +171,37 @@ export const AuthModal: React.FC = () => {
       return;
     }
 
+    // Verify College ID entered in login form
+    if (!loginCollegeId.trim()) {
+      setLoginError("Please enter your Shailabala College ID / Roll Number (e.g. SBWAC-2023-CS042, SBWC23-104) to confirm student identity.");
+      return;
+    }
+
+    const cleanId = loginCollegeId.trim().toUpperCase();
+    const isForeignCollegeId = cleanId.startsWith('IIT') || cleanId.startsWith('RAV') || cleanId.startsWith('KIIT') || cleanId.startsWith('DU') || cleanId.startsWith('NIT');
+    if (isForeignCollegeId) {
+      setLoginError(`Access Denied: College ID "${loginCollegeId}" belongs to another institution. Only Shailabala Women's Autonomous College students are permitted.`);
+      return;
+    }
+
     if (!loginPassword) {
       setLoginError('Please enter your account password.');
       return;
     }
-    const result = loginUserByEmail(loginInput, loginPassword, loginCollege);
+
+    const result = loginUserByEmail(
+      loginInput,
+      loginPassword,
+      loginCollege,
+      loginCollegeId,
+      loginSkillsOffered,
+      loginSkillsWanted
+    );
     if (!result.success) {
       setLoginError(result.message || 'Incorrect credentials. Please try again!');
     } else {
       setLoginInput('');
+      setLoginCollegeId('');
       setLoginPassword('');
     }
   };
@@ -143,6 +251,14 @@ export const AuthModal: React.FC = () => {
 
     if (!name.trim()) return setRegError('Please enter your full name.');
     if (!email.trim() || !email.includes('@')) return setRegError('Please enter a valid student email.');
+    
+    if (!regCollegeId.trim()) return setRegError('Please enter your Shailabala College ID Card / Roll Number.');
+    const cleanId = regCollegeId.trim().toUpperCase();
+    const isForeignCollegeId = cleanId.startsWith('IIT') || cleanId.startsWith('RAV') || cleanId.startsWith('KIIT') || cleanId.startsWith('DU') || cleanId.startsWith('NIT');
+    if (isForeignCollegeId) {
+      return setRegError(`Access Denied: College ID "${regCollegeId}" belongs to another institution. Only Shailabala Women's Autonomous College students can register.`);
+    }
+
     if (!regPassword || regPassword.length < 6) return setRegError('Password must be at least 6 characters long.');
     if (regPassword !== regConfirmPassword) return setRegError('Passwords do not match. Please verify your password.');
     if (!college.trim()) return setRegError('Please enter your college name.');
@@ -163,21 +279,22 @@ export const AuthModal: React.FC = () => {
       registerUser({
         name: name.trim(),
         email: email.trim(),
+        collegeId: regCollegeId.trim(),
         password: regPassword,
         college: college.trim(),
-        city: city.trim() || 'Campus',
+        city: city.trim() || 'Cuttack, Odisha',
         bio: bio.trim(),
         skillOffered: skillOffered.trim(),
         skillWanted: skillWanted.trim(),
         category,
         avatarUrl: regAvatarUrl
       });
-      // Clear inputs upon successful registration
       setName('');
       setEmail('');
+      setRegCollegeId('');
       setRegPassword('');
       setRegConfirmPassword('');
-      setCollege('');
+      setCollege("Shailabala Women's Autonomous College, Cuttack");
       setCity('');
       setBio('');
       setSkillOffered('');
@@ -189,22 +306,32 @@ export const AuthModal: React.FC = () => {
   };
 
   const categories: SkillCategory[] = [
-    'TECH', 'DESIGN', 'ACADEMICS', 'LANGUAGES', 
-    'MUSIC', 'BUSINESS', 'FITNESS', 'CREATIVE'
+    'Programming & Tech',
+    'UI/UX & Graphic Design',
+    'Music & Instruments',
+    'Languages & Linguistics',
+    'Math & Statistics',
+    'Science & Engineering',
+    'Marketing & Business',
+    'Photo & Video Editing',
+    'Personal Growth & Soft Skills'
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
         {/* Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-800/80 border-b border-slate-700">
+        <div className="flex items-center justify-between px-6 py-4 bg-slate-800/80 border-b border-slate-700 shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <h3 className="font-heading font-bold text-lg text-white">
-              Student Account Access
-            </h3>
+            <div>
+              <h3 className="font-heading font-bold text-lg text-white leading-tight">
+                SBWAC Student Access
+              </h3>
+              <p className="text-[11px] text-slate-400 font-medium">Shailabala Women's Autonomous College, Cuttack</p>
+            </div>
           </div>
           <button
             onClick={() => setIsAuthModalOpen(false)}
@@ -215,7 +342,7 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Mode Toggle Tabs */}
-        <div className="grid grid-cols-2 p-2 bg-slate-950 border-b border-slate-800">
+        <div className="grid grid-cols-2 p-2 bg-slate-950 border-b border-slate-800 shrink-0">
           <button
             type="button"
             onClick={() => { setMode('login'); setLoginError(''); }}
@@ -226,7 +353,7 @@ export const AuthModal: React.FC = () => {
             }`}
           >
             <LogIn className="w-4 h-4" />
-            Sign In
+            Sign In with College ID
           </button>
           <button
             type="button"
@@ -238,19 +365,21 @@ export const AuthModal: React.FC = () => {
             }`}
           >
             <UserPlus className="w-4 h-4" />
-            Create Account
+            Register Student Account
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto flex-1 space-y-4">
           {mode === 'login' ? (
-            <div className="space-y-6">
-              <div className="bg-indigo-950/60 border border-indigo-500/30 rounded-xl p-4 flex items-start gap-3">
-                <GraduationCap className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+            <div className="space-y-5">
+              <div className="bg-indigo-950/60 border border-indigo-500/30 rounded-xl p-3.5 flex items-start gap-3">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                 <div className="text-xs text-indigo-200 leading-relaxed">
-                  <span className="font-bold text-white block mb-0.5">🏛️ Shailabala Women's Autonomous College, Cuttack</span>
-                  Login is strictly restricted to verified students of SBWAC. Non-Shailabala college accounts will be restricted.
+                  <span className="font-bold text-white flex items-center gap-1.5 mb-0.5">
+                    🏛️ Shailabala Women's Autonomous College Verification
+                  </span>
+                  Please provide your <strong>Student Email / Name</strong>, write <strong>Shailabala Women's Autonomous College</strong>, and enter your <strong>College Student ID / Roll No</strong>.
                 </div>
               </div>
 
@@ -258,7 +387,7 @@ export const AuthModal: React.FC = () => {
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5 text-indigo-400" />
-                    Student Email or Name
+                    Student Email or Full Name *
                   </label>
                   <input
                     type="text"
@@ -266,6 +395,7 @@ export const AuthModal: React.FC = () => {
                     onChange={(e) => setLoginInput(e.target.value)}
                     placeholder="e.g. priyanka.sbwc@shailabalawomenscollege.ac.in or Priyanka Jena"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                    required
                   />
                 </div>
 
@@ -286,15 +416,119 @@ export const AuthModal: React.FC = () => {
                     required
                   />
                   <p className="text-[10px] text-slate-400 mt-1">
-                    🔒 Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>. Entries from other colleges will be blocked.
+                    🔒 Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>.
                   </p>
+                </div>
+
+                {/* College ID Card / Student Roll Number Field */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+                      Shailabala College ID Card / Roll No. *
+                    </span>
+                    <span className="text-[10px] text-indigo-300 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                      Required for Student Verification
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    value={loginCollegeId}
+                    onChange={(e) => setLoginCollegeId(e.target.value)}
+                    placeholder="e.g. SBWAC-2023-CS042, SBWC23-104, SBWAC-UG-2024"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white font-mono placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                    required
+                  />
+                  <p className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+                    <BadgeCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                    <span>Enter your official SBWAC student roll number / ID card code.</span>
+                  </p>
+                </div>
+
+                {/* Skill Options Selection at Login Time */}
+                <div className="bg-slate-950/90 border border-slate-800/90 rounded-2xl p-3.5 space-y-3.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
+                      Skills for Teaching & Learning (Select Options)
+                    </span>
+                    <span className="text-[10px] text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded-full font-semibold border border-indigo-500/20">
+                      Preset Options
+                    </span>
+                  </div>
+
+                  {/* Skills You Can Teach (Offered) */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-emerald-400 flex items-center gap-1">
+                        <Lightbulb className="w-3.5 h-3.5 text-emerald-400" />
+                        Skills You Can Teach (Offered):
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {loginSkillsOffered.length} selected
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {FEATURED_SKILL_OPTIONS.map((skill) => {
+                        const isSelected = loginSkillsOffered.includes(skill.name);
+                        return (
+                          <button
+                            key={`login-teach-${skill.id}`}
+                            type="button"
+                            onClick={() => toggleLoginSkillOffered(skill.name)}
+                            className={`px-2.5 py-1 rounded-xl text-xs font-medium border transition-all flex items-center gap-1.5 ${
+                              isSelected
+                                ? 'bg-emerald-600 text-white border-emerald-400 shadow-md shadow-emerald-600/30 font-bold'
+                                : 'bg-slate-900 text-slate-300 border-slate-700/80 hover:border-emerald-500/50 hover:bg-slate-800'
+                            }`}
+                          >
+                            {isSelected ? <Check className="w-3 h-3 stroke-[3]" /> : null}
+                            <span>{skill.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Skills You Want to Learn (Wanted) */}
+                  <div className="space-y-1.5 pt-2 border-t border-slate-800/80">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-indigo-300 flex items-center gap-1">
+                        <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+                        Skills You Want to Learn (Wanted):
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {loginSkillsWanted.length} selected
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {FEATURED_SKILL_OPTIONS.map((skill) => {
+                        const isSelected = loginSkillsWanted.includes(skill.name);
+                        return (
+                          <button
+                            key={`login-learn-${skill.id}`}
+                            type="button"
+                            onClick={() => toggleLoginSkillWanted(skill.name)}
+                            className={`px-2.5 py-1 rounded-xl text-xs font-medium border transition-all flex items-center gap-1.5 ${
+                              isSelected
+                                ? 'bg-indigo-600 text-white border-indigo-400 shadow-md shadow-indigo-600/30 font-bold'
+                                : 'bg-slate-900 text-slate-300 border-slate-700/80 hover:border-indigo-500/50 hover:bg-slate-800'
+                            }`}
+                          >
+                            {isSelected ? <Check className="w-3 h-3 stroke-[3]" /> : null}
+                            <span>{skill.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                       <Lock className="w-3.5 h-3.5 text-indigo-400" />
-                      Account Password
+                      Account Password *
                     </label>
                   </div>
                   <div className="relative">
@@ -304,6 +538,7 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => setLoginPassword(e.target.value)}
                       placeholder="Enter your account password"
                       className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                      required
                     />
                     <button
                       type="button"
@@ -316,22 +551,31 @@ export const AuthModal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400">
-                  <span className="flex items-center gap-1">
-                    <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Demo Password: <code className="text-indigo-300 bg-slate-800 px-1 py-0.5 rounded font-mono">password123</code></span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLoginInput('priyanka.sbwc@shailabalawomenscollege.ac.in');
-                      setLoginCollege("Shailabala Women's Autonomous College, Cuttack");
-                      setLoginPassword('password123');
-                    }}
-                    className="text-indigo-400 hover:text-indigo-300 font-bold underline transition-colors"
-                  >
-                    Quick fill Priyanka
-                  </button>
+                {/* Demo Helper Box */}
+                <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-xs space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <span className="flex items-center gap-1">
+                      <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Password: <code className="text-indigo-300 bg-slate-800 px-1 py-0.5 rounded font-mono">password123</code></span>
+                    </span>
+                    <span className="text-slate-400">ID: <code className="text-emerald-300 bg-slate-800 px-1 py-0.5 rounded font-mono">SBWAC-2023-CS042</code></span>
+                  </div>
+                  <div className="pt-1 border-t border-slate-800 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLoginInput('priyanka.sbwc@shailabalawomenscollege.ac.in');
+                        setLoginCollege("Shailabala Women's Autonomous College, Cuttack");
+                        setLoginCollegeId('SBWAC-2023-CS042');
+                        setLoginPassword('password123');
+                        setLoginSkillsOffered(['Python', 'HTML', 'Java']);
+                        setLoginSkillsWanted(['Spoken English', 'Presentation', 'Project Management']);
+                      }}
+                      className="text-indigo-400 hover:text-indigo-300 font-bold underline transition-colors text-xs"
+                    >
+                      Auto-fill Priyanka Jena (SBWAC Student)
+                    </button>
+                  </div>
                 </div>
 
                 {loginError && (
@@ -345,12 +589,12 @@ export const AuthModal: React.FC = () => {
                   className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2"
                 >
                   <LogIn className="w-4 h-4" />
-                  Sign In to My Account
+                  Verify College ID & Sign In
                 </button>
               </form>
 
               <div className="pt-4 border-t border-slate-800 text-center">
-                <p className="text-xs text-slate-400 mb-2">Don't have a student account yet?</p>
+                <p className="text-xs text-slate-400 mb-2">New Shailabala student? Register with your ID card:</p>
                 <button
                   onClick={() => { setMode('register'); setRegError(''); }}
                   className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-indigo-400 border border-slate-700 transition-colors inline-flex items-center gap-1.5"
@@ -467,6 +711,28 @@ export const AuthModal: React.FC = () => {
                 </div>
               </div>
 
+              {/* Shailabala College ID Card Number / Roll Number */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+                    Shailabala College ID / Roll Number *
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-bold">SBWAC Format</span>
+                </label>
+                <input
+                  type="text"
+                  value={regCollegeId}
+                  onChange={(e) => setRegCollegeId(e.target.value)}
+                  placeholder="e.g. SBWAC-2024-045 or SBWC23-108"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                  required
+                />
+                <p className="text-[10px] text-slate-400 mt-1">
+                  🔒 Required for student identity verification at Shailabala Women's Autonomous College.
+                </p>
+              </div>
+
               {/* Password Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -529,7 +795,7 @@ export const AuthModal: React.FC = () => {
                     required
                   />
                   <p className="text-[10px] text-slate-400 mt-1">
-                    ⚠️ Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>. Students from other colleges will be blocked.
+                    ⚠️ Must write <strong className="text-indigo-300">Shailabala Women's Autonomous College</strong>.
                   </p>
                 </div>
 
@@ -548,21 +814,49 @@ export const AuthModal: React.FC = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
-                  <Lightbulb className="w-3.5 h-3.5 text-emerald-400" />
-                  Primary Skill You Can Teach *
-                </label>
+              {/* Skills You Can Teach with Options */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
+                    <Lightbulb className="w-3.5 h-3.5 text-emerald-400" />
+                    Skills You Can Teach (Offered) *
+                  </label>
+                  <span className="text-[10px] text-emerald-400 font-bold">Click preset or type</span>
+                </div>
+
+                {/* Preset chips for teaching */}
+                <div className="flex flex-wrap gap-1.5 p-2 bg-slate-950 border border-slate-800 rounded-xl">
+                  {FEATURED_SKILL_OPTIONS.map((skill) => {
+                    const isSelected = skillOffered.toLowerCase().includes(skill.name.toLowerCase());
+                    return (
+                      <button
+                        key={`reg-teach-${skill.id}`}
+                        type="button"
+                        onClick={() => handleSelectRegTeachSkill(skill.name, skill.category)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 ${
+                          isSelected
+                            ? 'bg-emerald-600 text-white border-emerald-400 shadow-sm font-bold'
+                            : 'bg-slate-900 text-slate-300 border-slate-700/80 hover:border-emerald-500/50 hover:bg-slate-800'
+                        }`}
+                      >
+                        {isSelected ? <Check className="w-3 h-3 stroke-[3]" /> : null}
+                        <span>{skill.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
                 <input
                   type="text"
                   value={skillOffered}
                   onChange={(e) => setSkillOffered(e.target.value)}
-                  placeholder="e.g. Python Programming, Graphic Design, Piano Basics"
+                  placeholder="e.g. Java, Python, HTML, CSS, Presentation"
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                   required
                 />
               </div>
 
+              {/* Skill Category & Skills You Want to Learn */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -581,8 +875,8 @@ export const AuthModal: React.FC = () => {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1">
+                <div className="space-y-1">
+                  <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
                     <BookOpen className="w-3.5 h-3.5 text-amber-400" />
                     Skill You Want to Learn *
                   </label>
@@ -590,10 +884,41 @@ export const AuthModal: React.FC = () => {
                     type="text"
                     value={skillWanted}
                     onChange={(e) => setSkillWanted(e.target.value)}
-                    placeholder="e.g. Public Speaking, Spanish"
+                    placeholder="e.g. Spoken English, Project Management"
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                     required
                   />
+                </div>
+              </div>
+
+              {/* Preset chips for learning */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-semibold text-slate-300 flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                    Quick Learning Presets (Click to add/remove):
+                  </span>
+                  <span className="text-[10px] text-indigo-400 font-bold">Featured</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 p-2 bg-slate-950 border border-slate-800 rounded-xl">
+                  {FEATURED_SKILL_OPTIONS.map((skill) => {
+                    const isSelected = skillWanted.toLowerCase().includes(skill.name.toLowerCase());
+                    return (
+                      <button
+                        key={`reg-learn-${skill.id}`}
+                        type="button"
+                        onClick={() => handleSelectRegLearnSkill(skill.name)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 ${
+                          isSelected
+                            ? 'bg-indigo-600 text-white border-indigo-400 shadow-sm font-bold'
+                            : 'bg-slate-900 text-slate-300 border-slate-700/80 hover:border-indigo-500/50 hover:bg-slate-800'
+                        }`}
+                      >
+                        {isSelected ? <Check className="w-3 h-3 stroke-[3]" /> : null}
+                        <span>{skill.name}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -615,7 +940,7 @@ export const AuthModal: React.FC = () => {
                 className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                Register Account & Claim 100 Coins
+                Register SBWAC Account & Claim 100 Coins
               </button>
             </form>
           )}

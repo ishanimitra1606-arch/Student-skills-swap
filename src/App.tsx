@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Navigation } from './components/Navigation';
 import { AuthModal } from './components/AuthModal';
 import { VideoClassroomModal } from './components/VideoClassroomModal';
+import { FeedbackModal } from './components/FeedbackModal';
 import { HomeScreen } from './pages/HomeScreen';
 import { MarketplaceScreen } from './pages/MarketplaceScreen';
 import { SmartMatchScreen } from './pages/SmartMatchScreen';
@@ -39,6 +40,7 @@ export const App: React.FC = () => {
         <Navigation />
         <AuthModal />
         <VideoClassroomModal />
+        <FeedbackModal />
       </div>
     </SkillsSwapProvider>
   );
